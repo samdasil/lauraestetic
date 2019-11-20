@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragment.RelatorioFragment">
+
+    <Spinner
+        android:id="@+id/spinnerReferencia"
+        style="@android:style/Widget.DeviceDefault.Spinner"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginEnd="8dp"
+        android:dropDownWidth="wrap_content"
+        android:foregroundGravity="left"
+        android:popupElevation="0dp"
+        android:spinnerMode="dialog"
+        android:verticalScrollbarPosition="defaultPosition"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerAno"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerAno"
+        style="@android:style/Widget.DeviceDefault.Spinner"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right|top|center_vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginEnd="4dp"
+        android:dropDownWidth="wrap_content"
+        android:foregroundGravity="right"
+        android:spinnerMode="dialog"
+        android:theme="@style/Base.ThemeOverlay.AppCompat"
+        android:verticalScrollbarPosition="defaultPosition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lbHomeValor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="R$"
+        android:textColor="#9C27B0"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerReferencia" />
+
+    <TextView
+        android:id="@+id/tvHomeValorTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0.00"
+        android:textColor="#8BC34A"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/lbHomeValor"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerReferencia" />
+
+    <TextView
+        android:id="@+id/tvHomeQtd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textColor="#8BC34A"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/lbHomeAtendimento"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAno" />
+
+    <TextView
+        android:id="@+id/lbHomeAtendimento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="atendimento(s)"
+        android:textColor="#9C27B0"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAno" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
