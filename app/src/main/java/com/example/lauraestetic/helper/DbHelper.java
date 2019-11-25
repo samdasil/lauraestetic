@@ -9,7 +9,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // DADOS DO BANCO
     private static final String DATABASE = "laurestetic.db";
-    private static final int    VERSION  = 4;
+    private static final int    VERSION  = 2;
 
     // TABELAS DO BANCO DE DADOS SQLITE
     public static final String TB_SERVICO        = "tb_servico";
@@ -31,12 +31,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         switch (newVersion){
-            case 1:
+            case 2:
                 db.execSQL( "ALTER TABLE " + TB_SERVICO + " ADD COLUMN referencia INTEGER " );
-                break;
-            case 4:
-                db.execSQL( "ALTER TABLE " + TB_SERVICO + " ADD COLUMN teste INTEGER " );
-                Log.i("INFO","coluna teste adicionada");
                 break;
             default:
                 Log.i("INFO", "Nenhuma alteração encontrada");

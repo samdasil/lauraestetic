@@ -4,14 +4,14 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_pink_24dp"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_clientes"
-            android:icon="@drawable/ic_cliente_24dp"
-            android:title="Clientes" />
+        <!--<item-->
+            <!--android:id="@+id/nav_home"-->
+            <!--android:icon="@drawable/ic_home_pink_24dp"-->
+            <!--android:title="@string/menu_home" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_clientes"-->
+            <!--android:icon="@drawable/ic_cliente_24dp"-->
+            <!--android:title="Clientes" />-->
         <item
             android:id="@+id/nav_servicos"
             android:icon="@drawable/ic_servicos_pink_24dp"

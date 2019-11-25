@@ -36,6 +36,7 @@ import com.example.lauraestetic.dao.ServicoDAO;
 //import com.anychart.sample.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,12 +51,7 @@ public class RelatorioFragment extends Fragment {
     private TextView tvHomeQtd;
     private TextView lbHomeValor;
     private TextView lbHomeQtd;
-    private List<Servico> listServico;
-    private ServicoDAO servDao;
     private AnyChartView anyChartView;
-    private Cartesian cartesian;
-    private Column column;
-    private List<DataEntry> data;
 
     public RelatorioFragment() {}
 
@@ -77,10 +73,10 @@ public class RelatorioFragment extends Fragment {
         getSpinnerAno();
 
         // construct chart
-        loadDadosGraph();
+        //loadDadosGraph();
 
         // show graph
-        exibirGrafico();
+        //exibirGrafico(data);
 
         return view;
 
@@ -95,8 +91,8 @@ public class RelatorioFragment extends Fragment {
         lbHomeQtd       = view.findViewById( R.id.lbHomeAtendimento );
         lbHomeValor     = view.findViewById( R.id.lbHomeValor );
         anyChartView    = view.findViewById(R.id.any_chart_view);
-        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
 
+        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
         tvHomeQtd.setVisibility(View.INVISIBLE);
         tvHomeValor.setVisibility(View.INVISIBLE);
         lbHomeQtd.setVisibility(View.INVISIBLE);
@@ -109,13 +105,17 @@ public class RelatorioFragment extends Fragment {
 
     public void getSpinnerAno(){
         String[] lsAno = getResources().getStringArray(R.array.lista_ano);
-        ano.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lsAno));
-        ano.setSelection(0);
+        ano.setAdapter(new ArrayAdapter<String>(this.getContext(), R.layout.support_simple_spinner_dropdown_item, lsAno));
+        for (int i=0; i < lsAno.length; i++){
+            if(lsAno[i].equals(new Date().getYear())){
+                ano.setSelection(i);
+            }
+        }
         ano.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ano.setSelection(i);
                 loadDadosGraph();
-                exibirGrafico();
             }
 
             @Override
@@ -126,27 +126,25 @@ public class RelatorioFragment extends Fragment {
     }
 
     public void loadDadosGraph(){
-        cartesian = AnyChart.column();
-        servDao = new ServicoDAO(getContext());
 
-        data = new ArrayList<>();
-        data.add(new ValueDataEntry("Jan", servDao.valorTotal("Janeiro", ano.getSelectedItem().toString())));
+        ServicoDAO servDao = new ServicoDAO(this.getContext());
+
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new ValueDataEntry("Jan", servDao.valorTotal("Janeiro"  , ano.getSelectedItem().toString())));
         data.add(new ValueDataEntry("Fev", servDao.valorTotal("Fevereiro", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Mar", servDao.valorTotal("Março", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Abr", servDao.valorTotal("Abril", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Mai", servDao.valorTotal("Maio", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Jun", servDao.valorTotal("Junho", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Jul", servDao.valorTotal("Julho", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Ago", servDao.valorTotal("Agosto", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Set", servDao.valorTotal("Setembro", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Out", servDao.valorTotal("Outubro", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Nov", servDao.valorTotal("Novembro", ano.getSelectedItem().toString())));
-        data.add(new ValueDataEntry("Dez", servDao.valorTotal("Dezembro", ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Mar", servDao.valorTotal("Março"    , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Abr", servDao.valorTotal("Abril"    , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Mai", servDao.valorTotal("Maio"     , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Jun", servDao.valorTotal("Junho"    , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Jul", servDao.valorTotal("Julho"    , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Ago", servDao.valorTotal("Agosto"   , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Set", servDao.valorTotal("Setembro" , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Out", servDao.valorTotal("Outubro"  , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Nov", servDao.valorTotal("Novembro" , ano.getSelectedItem().toString())));
+        data.add(new ValueDataEntry("Dez", servDao.valorTotal("Dezembro" , ano.getSelectedItem().toString())));
 
-    }
-
-    public void exibirGrafico(){
-        column = cartesian.column(data);
+        Cartesian cartesian = AnyChart.column();
+        Column column = cartesian.column(data);
 
         column.tooltip()
                 .titleFormat("{%X}")
@@ -161,7 +159,7 @@ public class RelatorioFragment extends Fragment {
 
         cartesian.yScale().minimum(0d);
 
-        cartesian.yAxis(0).labels().format("R${%Value}{groupsSeparator: }");
+        cartesian.yAxis(0).labels().format("R$ {%Value}{groupsSeparator: }");
         cartesian.labels(true);
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
@@ -171,6 +169,8 @@ public class RelatorioFragment extends Fragment {
         //cartesian.yAxis(0).title("");
 
         anyChartView.setChart(cartesian);
+
     }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.lauraestetic.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lauraestetic.Cadastro;
 import com.example.lauraestetic.Home;
 import com.example.lauraestetic.R;
 import com.example.lauraestetic.adapter.ItemAdapter;
@@ -27,6 +29,7 @@ import com.example.lauraestetic.classes.Servico;
 import com.example.lauraestetic.dao.ServicoDAO;
 import com.example.lauraestetic.helper.RecyclerItemClickListener;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,6 +84,12 @@ public class ServicosFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        listarServicos();
+        super.onResume();
+    }
+
     public void initialize(View view){
         recyclerServico = view.findViewById( R.id.recyclerServicos );
         tvHomeValor     = view.findViewById( R.id.tvHomeValorTotal );
@@ -94,7 +103,7 @@ public class ServicosFragment extends Fragment {
         String[] lsMes = getResources().getStringArray(R.array.lista_mes);
 
         mes.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lsMes));
-        mes.setSelection(0);
+        mes.setSelection(new Date().getMonth());
         mes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -113,7 +122,12 @@ public class ServicosFragment extends Fragment {
     public void getSpinnerAno(){
         String[] lsAno = getResources().getStringArray(R.array.lista_ano);
         ano.setAdapter(new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, lsAno));
-        ano.setSelection(0);
+        for (int i=0; i < lsAno.length; i++){
+            if(lsAno[i].equals(new Date().getYear())){
+                ano.setSelection(i);
+            }
+        }
+        ano.getSelectedItemPosition();
         ano.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -269,7 +283,7 @@ public class ServicosFragment extends Fragment {
     public void abrirServico(int position){
 
         final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-        Servico servico = listServico.get(position);
+        final Servico servico = listServico.get(position);
 
         dialog.setTitle("Serviço");
         dialog.setMessage(
@@ -287,6 +301,15 @@ public class ServicosFragment extends Fragment {
                 dialog.cancel();
             }
 
+        });
+
+        dialog.setNeutralButton("Editar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(getContext(), Cadastro.class);
+                intent.putExtra("servico", (Serializable) servico);
+                startActivity(intent);
+            }
         });
 
         // exibir dialog

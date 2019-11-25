@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.Toast;
 import com.example.lauraestetic.classes.Servico;
 import com.example.lauraestetic.helper.DbHelper;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,15 @@ public class ServicoDAO {
         cv.put("obs", servico.getObs());
         cv.put("referencia", servico.getReferencia());
 
-        return escrever.insert(DbHelper.TB_SERVICO, null, cv) > 0;
+        if (servico.getCodigo() != 0){
+            cv.put("codigo", servico.getCodigo());
+            String[] args = {String.valueOf(servico.getCodigo())};
+            return escrever.update(DbHelper.TB_SERVICO,cv, "codigo = ?", args) > 0;
+        } else {
+            return escrever.insert(DbHelper.TB_SERVICO, null, cv) > 0;
+        }
+
+
     }
 
     public boolean deletar(int codigo) {
@@ -95,6 +106,10 @@ public class ServicoDAO {
                 total += list.get(i).getValor();
             }
         }
+
+//        NumberFormat format = new DecimalFormat(".##");
+//
+//        total = Double.parseDouble(format.format(total));
 
         return total;
     }

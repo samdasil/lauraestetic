@@ -60,7 +60,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView header = findViewById( R.id.nav_view );
         View headerView = header.getHeaderView(0);
 
-        textNomeUser    = findViewById( R.id.textNomeUser );
+        textNomeUser    = headerView.findViewById( R.id.textNomeUser );
         Toolbar toolbar = findViewById( R.id.toolbar );
 
         setSupportActionBar(toolbar);
@@ -71,7 +71,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         SharedPreferences preferences = getSharedPreferences(FILE_USER_DATA, 0);
         String nome  = preferences.getString("nome", "Usuário não definido");
 
-
+        textNomeUser.setText(nome);
 
         // float action button
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -85,6 +85,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         // Menu lateral
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        ServicosFragment servicosFragment = new ServicosFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frameContainer, servicosFragment);
+        fragmentTransaction.commit();
 
         // Menu lateral
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -125,14 +130,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            startActivity(new Intent(this,Home.class));
-        } else if (id == R.id.nav_clientes) {
-            ClientesFragment clientesFragment = new ClientesFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frameContainer, clientesFragment);
-            fragmentTransaction.commit();
-        } else if (id == R.id.nav_servicos) {
+//        if (id == R.id.nav_home) {
+//            startActivity(new Intent(this,Home.class));
+//        } else if (id == R.id.nav_clientes) {
+//            ClientesFragment clientesFragment = new ClientesFragment();
+//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.frameContainer, clientesFragment);
+//            fragmentTransaction.commit();
+        if (id == R.id.nav_servicos) {
             ServicosFragment servicosFragment = new ServicosFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frameContainer, servicosFragment);

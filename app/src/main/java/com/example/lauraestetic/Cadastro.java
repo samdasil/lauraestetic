@@ -21,6 +21,7 @@ import com.example.lauraestetic.classes.Servico;
 import com.example.lauraestetic.dao.ServicoDAO;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Cadastro extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +31,7 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
     private EditText editValor;
     private EditText editObs;
     private Spinner  referencia;
+    private int codigo = 0;
     private  Button btnSalvar;
     private double valor;
     private String ref;
@@ -42,19 +44,18 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
 
         //getSupportActionBar().setTitle("Novo serviço");
 
-        editData      = findViewById( R.id.editData);
-        editCliente   = findViewById( R.id.editCliente);
-        editDescricao = findViewById( R.id.editDescServico);
-        editValor     = findViewById( R.id.editValor);
-        editObs       = findViewById( R.id.editObs );
-        btnSalvar     = findViewById( R.id.btnSalvar);
-        referencia    = findViewById( R.id.spinnerReferencia );
+        init();
 
         editData.setOnClickListener(this);
 
         String[] lsRef = getResources().getStringArray(R.array.lista_mes);
         referencia.setAdapter(new ArrayAdapter<String>(Cadastro.this, R.layout.support_simple_spinner_dropdown_item, lsRef));
-        referencia.setSelection(0);
+        referencia.setSelection(new Date().getMonth());
+        for (int i=0; i < lsRef.length; i++){
+            if(lsRef[i].equals(new Date().getMonth())){
+                referencia.setSelection(i);
+            }
+        }
 
         referencia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -82,7 +83,7 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
                     editDescricao.requestFocus();
                     Toast.makeText(Cadastro.this, "Preencha o serviço", Toast.LENGTH_SHORT).show();
                 } else {
-                    Servico servico = new Servico();
+                    //Servico servico = new Servico();
 
                     if (editValor.getText().toString().equals("")) {
                         valor = 0.00;
@@ -90,15 +91,19 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
                         valor = Double.parseDouble(editValor.getText().toString());
                     }
 
-                    servico.setData(editData.getText().toString());
-                    servico.setCliente(editCliente.getText().toString());
-                    servico.setDescricao(editDescricao.getText().toString());
-                    servico.setValor(valor);
-                    servico.setObs(editObs.getText().toString());
-                    servico.setReferencia(ref);
+                    Servico serv = new Servico();
+
+                    serv.setCodigo(codigo);
+                    serv.setData(editData.getText().toString());
+                    serv.setCliente(editCliente.getText().toString());
+                    serv.setDescricao(editDescricao.getText().toString());
+                    serv.setValor(valor);
+                    serv.setObs(editObs.getText().toString());
+                    serv.setReferencia(ref);
 
                     ServicoDAO servDao = new ServicoDAO(getApplicationContext());
-                    if(servDao.salvar(servico)){
+                    if(servDao.salvar(serv)){
+                        Toast.makeText(Cadastro.this, "Operação realizada com sucesso!", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
                         AlertDialog.Builder dialogSalvar = new AlertDialog.Builder(Cadastro.this);
@@ -119,6 +124,34 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
 
         });
 
+    }
+
+    public void init(){
+        editData      = findViewById( R.id.editData);
+        editCliente   = findViewById( R.id.editCliente);
+        editDescricao = findViewById( R.id.editDescServico);
+        editValor     = findViewById( R.id.editValor);
+        editObs       = findViewById( R.id.editObs );
+        btnSalvar     = findViewById( R.id.btnSalvar);
+        referencia    = findViewById( R.id.spinnerReferencia );
+    }
+
+    @Override
+    protected void onResume() {
+        Servico servico = (Servico) getIntent().getSerializableExtra("servico");
+
+        if (servico != null) {
+            init();
+            editData.setText(servico.getData());
+            editCliente.setText(servico.getCliente());
+            editDescricao.setText(servico.getDescricao());
+            editValor.setText(servico.getValor().toString());
+            editObs.setText(servico.getObs());
+            referencia.setSelection(selecionaPosMes(servico.getReferencia()));
+            codigo = servico.getCodigo();
+        }
+
+        super.onResume();
     }
 
     @Override
@@ -153,6 +186,41 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
             datePickerDialog.show();
         }
 
+    }
+
+
+    private int selecionaPosMes(String refer) {
+
+        switch (refer){
+            case "Janeiro":
+                return 0;
+            case "Favereiro":
+                return 1;
+            case "Março":
+                return 2;
+            case "Abril":
+                return 3;
+            case "Maio":
+                return 4;
+            case "Junho":
+                return 5;
+            case "Julho":
+                return 6;
+            case "Agosto":
+                return 7;
+            case "Setembro":
+                return 8;
+            case "Outubro":
+                return 9;
+            case "Novembro":
+                return 10;
+            case "Dezembro":
+                return 11;
+            default:
+                //Toast.makeText(this, "Erro ao selecionar mês.", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return 0;
     }
 
     private void selecionaMes(int i) {
@@ -201,4 +269,5 @@ public class Cadastro extends AppCompatActivity implements View.OnClickListener 
         }
 
     }
+
 }

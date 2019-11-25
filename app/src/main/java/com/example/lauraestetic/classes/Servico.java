@@ -1,8 +1,9 @@
 package com.example.lauraestetic.classes;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Servico {
+public class Servico implements Serializable {
 
     private int codigo;
     private String data;
